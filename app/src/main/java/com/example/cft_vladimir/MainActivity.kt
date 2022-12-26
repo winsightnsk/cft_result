@@ -46,8 +46,14 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
                 .build()
             val retrofitService = retro.create(ApiS::class.java)
             BIN.N = amedit.text.toString()
-            val gotretro = retrofitService.getBinAnswer(BIN.N)
-            gotretro.enqueue(this)
+            if (BIN.N.length in 6..8){
+                try {
+                    val gotretro = retrofitService.getBinAnswer(BIN.N)
+                    gotretro.enqueue(this)
+                } catch (_: Exception){
+                    amtext.text = "Ошибка обработки данных."
+                }
+            } else amtext.text = "от 6 до 8 символов."
         }
     }
 
@@ -59,6 +65,10 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
     }
 
     override fun onFailure(call: Call<JBin>, t: Throwable) {
-        amtext.text = amtext.text.toString() + "\nonFailure\n${t.message}"
+        val regex = """Unable to resolve host*""".toRegex()
+        if (regex.containsMatchIn(t.message?:"")){
+            amtext.text = "Проверьте подключение к интернету."
+        }
+        else amtext.text = "Неизвестная ошибка"
     }
 }
