@@ -1,6 +1,7 @@
 package com.example.cft_vladimir
 
 import android.os.Bundle
+import android.view.Menu
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -18,8 +19,6 @@ object BIN {
     var N: String = "55369138"
 }
 class MainActivity : AppCompatActivity(), Callback<JBin> {
-
-
 
     lateinit var amtext : TextView
     lateinit var amedit : EditText
@@ -55,6 +54,11 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
                 }
             } else amtext.text = "от 6 до 8 символов."
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onResponse(call: Call<JBin>, response: Response<JBin>) {
