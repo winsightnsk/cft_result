@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
         setContentView(R.layout.activity_main)
 
         amtext = findViewById(R.id.amtext)
+        amtext.text =""
         amedit = findViewById(R.id.amedit)
         ambuttongo = findViewById(R.id.ambuttongo)
         ambuttongo.setOnClickListener { _->
@@ -43,18 +44,18 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
             val retrofitService = retro.create(ApiS::class.java)
             val gotretro = retrofitService.getBinAnswer()
             gotretro.enqueue(this)
-//            val retrofitService : ApiS by lazy {
-//                retro.create(ApiS::class.java)
-//            }
-            amtext.text= retrofitService.getBinAnswer().toString()
         }
     }
 
     override fun onResponse(call: Call<JBin>, response: Response<JBin>) {
-        TODO("Not yet implemented")
+        var s = amtext.text.toString() + "\nResponse message:\n${response.message()}"
+        val r = response.body() as JBin
+        s+= "\nResponse body:\n${r}"
+//        s+= "\nResponse successful: ${response.isSuccessful}"
+        amtext.text = s
     }
 
     override fun onFailure(call: Call<JBin>, t: Throwable) {
-        TODO("Not yet implemented")
+        amtext.text = amtext.text.toString() + "\nonFailure\n${t.message}"
     }
 }
