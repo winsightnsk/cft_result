@@ -1,10 +1,14 @@
 package com.example.cft_vladimir
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cft_vladimir.network.*
 import retrofit2.Call
@@ -59,6 +63,30 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.main_author -> {
+                showAuthorDialog()
+                return true
+            }
+            R.id.main_history -> {
+                startActivity(Intent(R.i, HistList::class.java))
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showAuthorDialog() {
+        val view = LayoutInflater.from(this)
+            .inflate(R.layout.author, null)
+        val builder = AlertDialog.Builder(this)
+        builder.setView(view)
+        builder.setTitle("Об авторе")
+
+        builder.create().show()
     }
 
     override fun onResponse(call: Call<JBin>, response: Response<JBin>) {

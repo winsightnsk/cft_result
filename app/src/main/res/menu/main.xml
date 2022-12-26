@@ -2,9 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:title="Автор"
+        android:id="@+id/main.author"
+        android:icon="@drawable/ic_baseline_portrait_24"
+        app:showAsAction="always"
+        />
+    <item
         android:title="История"
         android:id="@+id/main.history"
         android:icon="@drawable/ic_baseline_playlist_add_check_24"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
 </menu>
