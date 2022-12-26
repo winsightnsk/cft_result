@@ -19,6 +19,10 @@ import java.net.URL
 
 class MainActivity : AppCompatActivity(), Callback<JBin> {
 
+    object BIN {
+        var N: String = "55369138"
+    }
+
     lateinit var amtext : TextView
     lateinit var amedit : EditText
     lateinit var ambuttongo : Button
@@ -48,10 +52,27 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
     }
 
     override fun onResponse(call: Call<JBin>, response: Response<JBin>) {
-        var s = amtext.text.toString() + "\nResponse message:\n${response.message()}"
+        var s = "BIN: "
         val r = response.body() as JBin
-        s+= "\nResponse body:\n${r}"
-//        s+= "\nResponse successful: ${response.isSuccessful}"
+        s+= "\nBank:"
+        s+= "\n   city: ${r.bank.city}"
+        s+= "\n   name: ${r.bank.name}"
+        s+= "\n   url: ${r.bank.url}\n"
+        s+= "\nCountry:"
+        s+= "\n   name: ${r.country.name}"
+        s+= "\n   alpha2: ${r.country.alpha2}"
+        s+= "\n   emoji: ${r.country.emoji}"
+        s+= "\n   currency: ${r.country.currency}"
+        s+= "\n   latitude: ${r.country.latitude}"
+        s+= "\n   longitude: ${r.country.longitude}"
+        s+= "\n   numeric: ${r.country.numeric}\n"
+        s+= "\nbrand: ${r.brand}\n"
+        s+= "\nNumber:"
+        s+= "\n   length: ${r.number.length}"
+        s+= "\n   luhn: ${r.number.luhn}\n"
+        s+= "\nprepaid: ${r.prepaid}\n"
+        s+= "\nscheme: ${r.scheme}\n"
+        s+= "\ntype: ${r.type}\n"
         amtext.text = s
     }
 
