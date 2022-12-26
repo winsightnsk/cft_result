@@ -1,5 +1,6 @@
 package com.example.cft_vladimir.network
 
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -13,7 +14,7 @@ private val retrofit = Retrofit.Builder()
 
 interface BinApiService {
     @GET("55369138")
-    suspend fun getBinAnswer() : String
+    fun getBinAnswer() : String //Call<JBin>
 }
 
 object BinApi {

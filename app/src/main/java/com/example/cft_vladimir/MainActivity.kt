@@ -5,12 +5,28 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.example.cft_vladimir.network.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+//import com.example.cft_vladimir.network.BinApi
+//import com.example.cft_vladimir.network.BinApiService
+//import com.example.cft_vladimir.network.retrofit
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import java.net.URL
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Callback<JBin> {
 
     lateinit var amtext : TextView
     lateinit var amedit : EditText
     lateinit var ambuttongo : Button
+
+    interface ApiS {
+        @GET("55369138")
+        fun getBinAnswer() : Call<JBin>
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +36,25 @@ class MainActivity : AppCompatActivity() {
         amedit = findViewById(R.id.amedit)
         ambuttongo = findViewById(R.id.ambuttongo)
         ambuttongo.setOnClickListener { _->
-            amtext.text="ttt"
+            val retro = Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("https://lookup.binlist.net/")
+                .build()
+            val retrofitService = retro.create(ApiS::class.java)
+            val gotretro = retrofitService.getBinAnswer()
+            gotretro.enqueue(this)
+//            val retrofitService : ApiS by lazy {
+//                retro.create(ApiS::class.java)
+//            }
+            amtext.text= retrofitService.getBinAnswer().toString()
         }
+    }
+
+    override fun onResponse(call: Call<JBin>, response: Response<JBin>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onFailure(call: Call<JBin>, t: Throwable) {
+        TODO("Not yet implemented")
     }
 }
