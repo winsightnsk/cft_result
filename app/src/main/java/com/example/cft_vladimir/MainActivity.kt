@@ -1,6 +1,5 @@
 package com.example.cft_vladimir
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -10,6 +9,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.cft_vladimir.network.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,16 +18,19 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import java.time.LocalDate
+import java.util.Date
 
 object BIN {
     var N: String = "55369138"
 }
 class MainActivity : AppCompatActivity(), Callback<JBin> {
 
-    lateinit var amtext : TextView
-    lateinit var amedit : EditText
-    lateinit var ambuttongo : Button
+    private lateinit var amtext : TextView
+    private lateinit var amedit : EditText
+    private lateinit var ambuttongo : Button
 
+    private lateinit var model: HistVM
 
     interface ApiS {
         @GET("{bin}")
@@ -37,6 +40,8 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
 
         amtext = findViewById(R.id.amtext)
         amtext.text =""
@@ -53,11 +58,13 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
                 try {
                     val gotretro = retrofitService.getBinAnswer(BIN.N)
                     gotretro.enqueue(this)
+                    model.addHist(RoomHist(BIN.N))
                 } catch (_: Exception){
                     amtext.text = "Ошибка обработки данных."
                 }
             } else amtext.text = "от 6 до 8 символов."
         }
+        model = ViewModelProvider(this)[HistVM::class.java]
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -72,11 +79,26 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
                 return true
             }
             R.id.main_history -> {
-                startActivity(Intent(R.i, HistList::class.java))
+                showHistDialog()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showHistDialog() {
+        val view = LayoutInflater.from(this)
+            .inflate(R.layout.dialog_hist, null)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setView(view)
+        builder.setTitle("История запросов")
+
+        builder.setNegativeButton("Закрыть"){
+            dialog, _ ->  dialog.cancel()
+        }
+
+        builder.create().show()
     }
 
     private fun showAuthorDialog() {
@@ -85,7 +107,6 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
         val builder = AlertDialog.Builder(this)
         builder.setView(view)
         builder.setTitle("Об авторе")
-
         builder.create().show()
     }
 
