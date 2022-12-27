@@ -22,15 +22,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewEnd"/>
+
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="phone"
         android:text="тел.: +7 (952) 904 12 45"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewEnd"/>
+        android:textAlignment="viewEnd" />
+
     <TextView
-        android:text="WinSight@mail.ru"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="viewEnd"/>
+        android:autoLink="email"
+        android:text="WinSight@mail.ru"
+        android:textAlignment="center" />
 
 </LinearLayout>

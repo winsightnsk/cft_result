@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,8 +34,7 @@ object BIN {
 fun BIN.add(){
     val prefEdit = this.pref.edit()
     val d = LocalDateTime.now()
-    val int: Int = d.monthValue
-    prefEdit.putString("${d.year}.${int}.${d.dayOfMonth}_${d.hour}:${d.minute}", this.N)
+    prefEdit.putString("${d.hour}:${d.minute}:${d.second} ${d.dayOfMonth}.${d.monthValue}.${d.year} ", this.N)
     prefEdit.apply()
 }
 
@@ -112,10 +112,14 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
         val builder = AlertDialog.Builder(this)
         builder.setView(view)
         builder.setTitle("История запросов")
-        builder.setNegativeButton("Закрыть"){
+        builder.setNegativeButton("Очистить"){ dialog, _ ->
+            BIN.pref.edit(true){ this.clear() }
+            dialog.cancel()
+        }
+        builder.setPositiveButton("Закрыть"){
             dialog, _ ->  dialog.cancel()
         }
-        var rec : RecyclerView = view.findViewById(R.id.dh_rec)
+        val rec : RecyclerView = view.findViewById(R.id.dh_rec)
         val recData = mutableListOf<List<String>>()
         for (item in BIN.pref.all){
             recData.add(listOf(item.key,"${item.value}"))
