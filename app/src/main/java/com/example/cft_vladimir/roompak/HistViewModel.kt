@@ -1,22 +1,23 @@
-package com.example.cft_vladimir
+package com.example.cft_vladimir.roompak
 
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import java.util.concurrent.Executors
 
-class HistVM : AndroidViewModel(HistApp.instance) {
-    private val db = HistDB.getInstance(getApplication())
-    private val dao = db!!.histDao()
+class HistViewModel : AndroidViewModel(HistApplication.instance) {
+    private val db = HistDatabase.getInstance(getApplication())
+    private val dao = db!!.HistDao()
     private val service = Executors.newFixedThreadPool(1)
 
-    fun getAll() : LiveData<List<RoomHist>>{
+    fun getAll() : LiveData<List<Hist>>
+    {
         return dao.getAll()
     }
 
-    fun addHist(rhist: RoomHist)
+    fun addBook(hist: Hist)
     {
         service.submit {
-            dao.insert(rhist)
+            dao.insert(hist)
         }
     }
 
@@ -24,4 +25,5 @@ class HistVM : AndroidViewModel(HistApp.instance) {
         super.onCleared()
         service.shutdown()
     }
+
 }

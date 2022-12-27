@@ -1,15 +1,15 @@
 package com.example.cft_vladimir
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+//import android.os.Bundle
+//import android.view.LayoutInflater
+//import android.view.Menu
+//import android.view.MenuItem
+//import android.widget.Button
+//import android.widget.EditText
+//import android.widget.TextView
+//import androidx.appcompat.app.AlertDialog
+//import androidx.appcompat.app.AppCompatActivity
+//import androidx.lifecycle.ViewModelProvider
 import com.example.cft_vladimir.network.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,19 +18,34 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
-import java.time.LocalDate
-import java.util.Date
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RatingBar
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.cft_vladimir.roompak.HistViewModel
 
 object BIN {
-    var N: String = "55369138"
+    var N: String = ""
 }
 class MainActivity : AppCompatActivity(), Callback<JBin> {
+    private lateinit var list: RecyclerView
+    private lateinit var adapter: HistAdapter
+    private lateinit var model: HistViewModel
 
     private lateinit var amtext : TextView
     private lateinit var amedit : EditText
     private lateinit var ambuttongo : Button
-
-    private lateinit var model: HistVM
 
     interface ApiS {
         @GET("{bin}")
@@ -40,13 +55,10 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-
-        amtext = findViewById(R.id.amtext)
+        amtext = findViewById<TextView>(R.id.amtext)
         amtext.text =""
-        amedit = findViewById(R.id.amedit)
-        ambuttongo = findViewById(R.id.ambuttongo)
+        amedit = findViewById<EditText>(R.id.amedit)
+        ambuttongo = findViewById<Button>(R.id.ambuttongo)
         ambuttongo.setOnClickListener { _->
             val retro = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
@@ -58,13 +70,13 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
                 try {
                     val gotretro = retrofitService.getBinAnswer(BIN.N)
                     gotretro.enqueue(this)
-                    model.addHist(RoomHist(BIN.N))
+                    //model.addHist(RoomHist(BIN.N))
                 } catch (_: Exception){
                     amtext.text = "Ошибка обработки данных."
                 }
             } else amtext.text = "от 6 до 8 символов."
         }
-        model = ViewModelProvider(this)[HistVM::class.java]
+//        model = ViewModelProvider(this)[HistVM::class.java]
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -89,15 +101,12 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
     private fun showHistDialog() {
         val view = LayoutInflater.from(this)
             .inflate(R.layout.dialog_hist, null)
-
         val builder = AlertDialog.Builder(this)
         builder.setView(view)
         builder.setTitle("История запросов")
-
         builder.setNegativeButton("Закрыть"){
             dialog, _ ->  dialog.cancel()
         }
-
         builder.create().show()
     }
 
