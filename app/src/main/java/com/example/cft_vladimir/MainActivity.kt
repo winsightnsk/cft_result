@@ -1,15 +1,7 @@
 package com.example.cft_vladimir
 
-//import android.os.Bundle
-//import android.view.LayoutInflater
-//import android.view.Menu
-//import android.view.MenuItem
-//import android.widget.Button
-//import android.widget.EditText
-//import android.widget.TextView
-//import androidx.appcompat.app.AlertDialog
-//import androidx.appcompat.app.AppCompatActivity
-//import androidx.lifecycle.ViewModelProvider
+import android.content.Context
+import android.content.SharedPreferences
 import com.example.cft_vladimir.network.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,20 +12,17 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
-import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cft_vladimir.roompak.HistViewModel
+import java.time.LocalDateTime
 
 object BIN {
     var N: String = ""
@@ -47,6 +36,8 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
     private lateinit var amedit : EditText
     private lateinit var ambuttongo : Button
 
+    lateinit var pref : SharedPreferences
+
     interface ApiS {
         @GET("{bin}")
         fun getBinAnswer(@Path("bin") bin: String) : Call<JBin>
@@ -59,6 +50,10 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
         amtext.text =""
         amedit = findViewById<EditText>(R.id.amedit)
         ambuttongo = findViewById<Button>(R.id.ambuttongo)
+//        model = ViewModelProvider(this)[HistViewModel::class.java]
+
+        pref = getPreferences(Context.MODE_PRIVATE)
+
         ambuttongo.setOnClickListener { _->
             val retro = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
@@ -66,17 +61,23 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
                 .build()
             val retrofitService = retro.create(ApiS::class.java)
             BIN.N = amedit.text.toString()
+
+            val prefList = pref.all
+            Log.d("-----------------------", prefList.toString()) //TODO ------Убрать!!
+
             if (BIN.N.length in 6..8){
                 try {
                     val gotretro = retrofitService.getBinAnswer(BIN.N)
                     gotretro.enqueue(this)
-                    //model.addHist(RoomHist(BIN.N))
+                    val prefEdit = pref.edit()
+                    val s = LocalDateTime.now().toString()
+                    prefEdit.putString(LocalDateTime.now().toString(), "")
+//                    hedit.putStringSet("hlist",)
                 } catch (_: Exception){
                     amtext.text = "Ошибка обработки данных."
                 }
             } else amtext.text = "от 6 до 8 символов."
         }
-//        model = ViewModelProvider(this)[HistVM::class.java]
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -134,3 +135,4 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
         else amtext.text = "Неизвестная ошибка"
     }
 }
+
