@@ -2,7 +2,6 @@ package com.example.cft_vladimir
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -57,15 +56,15 @@ class MainActivity : AppCompatActivity(), Callback<JBin> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 //        recList = findViewById<RecyclerView>(R.id.hist_list)
-        amtext = findViewById<TextView>(R.id.amtext)
+        amtext = findViewById(R.id.amtext)
         amtext.text =""
-        amedit = findViewById<EditText>(R.id.amedit)
-        ambuttongo = findViewById<Button>(R.id.ambuttongo)
+        amedit = findViewById(R.id.amedit)
+        ambuttongo = findViewById(R.id.ambuttongo)
 //        model = ViewModelProvider(this)[HistViewModel::class.java]
 
         BIN.pref = getPreferences(android.content.Context.MODE_PRIVATE)
 
-        ambuttongo.setOnClickListener { _->
+        ambuttongo.setOnClickListener {
             val retro = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl("https://lookup.binlist.net/")

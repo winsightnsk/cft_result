@@ -11,7 +11,7 @@ data class JBin(
 )
 
 fun JBin.toS(): String{
-    var s: String = "Bank:"
+    var s = "Bank:"
     s+= "\n   city: ${this.bank.city}"
     s+= "\n   name: ${this.bank.name}"
     s+= "\n   url: ${this.bank.url}\n"

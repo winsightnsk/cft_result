@@ -11,6 +11,6 @@ class HistHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fieldN.text    = hist[1]
     }
 
-    var fieldDate: TextView = itemView.findViewById(R.id.dhistt)
-    var fieldN   : TextView = itemView.findViewById(R.id.dhistn)
+    private var fieldDate: TextView = itemView.findViewById(R.id.dhistt)
+    private var fieldN   : TextView = itemView.findViewById(R.id.dhistn)
 }

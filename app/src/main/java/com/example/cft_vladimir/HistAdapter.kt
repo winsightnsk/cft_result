@@ -3,7 +3,6 @@ package com.example.cft_vladimir
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cft_vladimir.roompak.Hist
 
 class HistAdapter (private val hists : List<List<String>>) : RecyclerView.Adapter<HistHolder>() {
 
