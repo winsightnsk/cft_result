@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.cft_vladimir"
-        minSdk 15
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"

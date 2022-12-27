@@ -3,13 +3,14 @@ package com.example.cft_vladimir
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cft_vladimir.roompak.Hist
 
 class HistHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(hist: Hist) {
-        title.text    = hist.binNum
+    fun bind(hist: List<String>) {
+        fieldDate.text = hist[0]
+        fieldN.text    = hist[1]
     }
 
-    var title:  TextView  = itemView.findViewById(R.id.dhist)
+    var fieldDate: TextView = itemView.findViewById(R.id.dhistt)
+    var fieldN   : TextView = itemView.findViewById(R.id.dhistn)
 }
